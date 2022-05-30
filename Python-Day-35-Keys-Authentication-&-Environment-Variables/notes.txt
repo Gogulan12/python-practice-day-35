@@ -1,0 +1,37 @@
+I just discovered a fabulous method of saving and retrieving Python environmental variables such as passwords and API keys. I simply had to share it with the community :)
+
+Create a text file called .env (you could actually call it anything I guess, but this makes it unusual, brief and descriptive). Put this file in any folder of your choice... well away from any Python code you might make public, e.g. GitHub, GitLab, etc. For example, mine is located at "E:\Python\EnvironmentVariables\.env".
+
+Edit the file in your favourite text editor, and create your secrets. You can have all of your secrets for all of your projects in this one file if you wish, which keeps your Operating System Variables uncluttered by Python envs.
+
+Just make sure the secrets all have different names - maybe add the project name on the beginning or end - your choice. The [Headings] are purely for your own benefit, but should not contain spaces or you could get a "could not parse" error (non-fatal).
+
+[MyProject]
+# My top-secret settings for MyProject
+MyUsername="Fred Bloggs"
+MyEmail="fred@example.com"
+MyPassword="fvghtyu7i890ol"
+
+[MyOtherProject]
+# My top-secret settings for MyOtherProject
+MyAPIKey_MyOtherProject="FMu4ejyK-qQLBasTs7iHx*SFN5fF"
+email_port=110
+DEBUG=True
+Now in your python program do this to get access to any secret you want, in any project!
+
+NOTE: This uses python-dotenv available here python-dotenv 0.15.0 NOT dotenv 0.0.5 ! You should install this using PyCharm Terminal pip install python-dotenv, or via File -> Settings -> Project: <name> -> Python Interpreter - use the + button at the bottom to add packages.
+
+import os
+from dotenv import load_dotenv  # pip install python-dotenv
+
+load_dotenv("E:/Python/EnvironmentVariables/.env")
+USER_NAME = os.getenv("MyUsername")
+API_KEY = os.getenv("MyAPIKey_MyOtherProject")
+debug = bool(os.getenv("DEBUG"))
+email_port = int(os.getenv("email_port"))
+
+print(USER_NAME, API_KEY, debug, email_port)
+Note that even though I've written email_port as an integer and DEBUG as a boolean, when they are read into your project they are interpreted as strings, so they will still need to be converted! Conclusion: environment variables are always strings.
+
+If you're worried about the security of the text file on your PC, then you could encrypt the file using something like AXCrypt.
+
